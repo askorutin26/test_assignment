@@ -12,7 +12,7 @@ import { observer } from "mobx-react-lite";
 import commentsStore from "../store/commentsStore.js";
 import axios from "axios";
 import api from "../api.js";
-const NewsPage = observer(() => {
+const NewsPage = () => {
   const params = useParams();
   const newsID = Number(params.id);
 
@@ -29,7 +29,7 @@ const NewsPage = observer(() => {
           const { data: commentData } = await axios.get(api.getOne(comment));
           commentsStore.addComment(newsID, commentData);
           if (kidsIndex === kids.length - 1) {
-            load("comments");
+            load("comments", newsID);
           }
         });
       }
@@ -76,7 +76,7 @@ const NewsPage = observer(() => {
       </Card>
     </Container>
   );
-});
+};
 
 export default NewsPage;
 //

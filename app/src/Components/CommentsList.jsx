@@ -13,7 +13,7 @@ const getComment = async (commentID) => {
   return data;
 };
 
-const CommentsList = observer(({ newsID, kids }) => {
+const CommentsList = ({ newsID, kids }) => {
   const AppContext = useAppContext();
   const { load, newsLoaded, commentsLoaded, nestedcommentsLoaded } = AppContext;
   /* useEffect(() => {
@@ -37,11 +37,10 @@ const CommentsList = observer(({ newsID, kids }) => {
   const [show, setShow] = useState(true);
   const list = [];
 
-  commentsLoaded &&
-    commentsStore.getComments(newsID).forEach((comment) => {
-      const { kids, id } = comment;
-      list.push(<Comment comment={comment} key={id} />);
-    });
+  commentsStore.getComments(newsID).forEach((comment) => {
+    const { kids, id } = comment;
+    list.push(<Comment comment={comment} key={id} />);
+  });
   return (
     <Card className="border-0 rounded-top d-flex">
       <Card.Header className="d-flex justify-content-start">
@@ -66,6 +65,6 @@ const CommentsList = observer(({ newsID, kids }) => {
       {show && list}
     </Card>
   );
-});
+};
 
 export default CommentsList;

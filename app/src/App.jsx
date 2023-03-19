@@ -24,7 +24,7 @@ const updateNews = async () => {
   }
 };
 
-const App = observer(() => {
+const App = () => {
   const AppContext = useAppContext();
   const { load, newsLoaded, commentsLoaded, nestedcommentsLoaded } = AppContext;
 
@@ -33,7 +33,7 @@ const App = observer(() => {
       <Nav />
       <Routes>
         <Route
-          path={"/"}
+          path="/"
           element={
             <Container fluid className="g-0">
               {<NewsList />}
@@ -44,7 +44,7 @@ const App = observer(() => {
       </Routes>
     </Router>
   );
-});
+};
 export default App;
 //  <Route path={'/news'} element={} />
 //

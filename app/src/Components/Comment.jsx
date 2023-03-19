@@ -11,11 +11,12 @@ const getComment = async (commentID) => {
   return data;
 };
 const ShowNestedButton = ({ show, setShowNested }) => {
-  const btnClass = show ? "bi-caret-up" : "bi-caret-down";
+  const caretClass = show ? "bi-caret-up" : "bi-caret-down";
+  const colorClass = show ? "text-info" : "text-dark";
   return (
     <Button
       variant="link"
-      className={`p-0  bi ${btnClass} text-secondary text-decoration-none`}
+      className={`p-0  bi ${caretClass} text-secondary text-decoration-none ${colorClass}`}
       onClick={() => {
         setShowNested(!show);
       }}
@@ -28,16 +29,17 @@ const Comment = observer(({ comment }) => {
   const { by, text, id: commentID, kids, deleted } = comment;
   const [showNested, setShowNested] = useState(false);
   const AppContext = useAppContext();
-  const { load, commentsLoaded, nestedcommentsLoaded } = AppContext;
+  const { load, commentsLoaded, nestedCommentsLoaded } = AppContext;
+  const nestedComments = nestedCommentsStore.getNestedComments(commentID);
   useEffect(() => {
     const saveNestedComments = async () => {
-      if (kids) {
+      if (kids && !nestedComments) {
         kids.forEach((nestedComment, nestedIndex) => {
           const data = getComment(nestedComment);
           data.then((commentData) => {
             nestedCommentsStore.addNestedComment(commentID, commentData);
             if (nestedIndex === kids.length - 1) {
-              load("nested");
+              load("nested", commentID);
             }
           });
         });
@@ -46,12 +48,6 @@ const Comment = observer(({ comment }) => {
     saveNestedComments();
   }, []);
 
-  const nestedCommentsList = nestedCommentsStore.getNestedComments(commentID);
-  const list =
-    nestedCommentsList &&
-    nestedCommentsList.map((nested, index) => (
-      <Comment comment={nested} key={index + nested.id} />
-    ));
   return (
     <Card className="border-0 border-bottom d-flex align-items-start">
       {deleted ? (
@@ -68,7 +64,13 @@ const Comment = observer(({ comment }) => {
           {kids && (
             <ShowNestedButton show={showNested} setShowNested={setShowNested} />
           )}
-          {showNested && nestedCommentsList && list}
+          {showNested &&
+            nestedComments &&
+            nestedComments.map((nested, index) => (
+              <div className="ps-3 d-flex " key={index + nested.id}>
+                <Comment comment={nested} />
+              </div>
+            ))}
         </>
       )}
     </Card>

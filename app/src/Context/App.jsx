@@ -9,16 +9,16 @@ const AppProvider = ({ children }) => {
   const [newsLoaded, setLoaded] = useState(false);
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [nestedCommentsLoaded, setNestedLoaded] = useState(false);
-  const load = (type) => {
+  const load = (type, ID) => {
     switch (type) {
       case "news":
         setLoaded(true);
         break;
       case "comments":
-        setCommentsLoaded(true);
+        setCommentsLoaded(ID);
         break;
       case "nested":
-        setNestedLoaded(true);
+        setNestedLoaded(ID);
         break;
       default:
         console.log(`Unexpected type: ${type}`);
