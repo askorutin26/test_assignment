@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
-import api from "../api";
-import nestedCommentsStore from "../store/nestedComments";
+
 import { observer } from "mobx-react-lite";
-import { useAppContext } from "../Context/App.jsx";
-const getComment = async (commentID) => {
-  const { data } = await axios.get(api.getOne(commentID));
-  return data;
-};
+
 const ShowNestedButton = ({ show, setShowNested }) => {
   const caretClass = show ? "bi-caret-up" : "bi-caret-down";
   const colorClass = show ? "text-info" : "text-dark";
@@ -26,28 +20,16 @@ const ShowNestedButton = ({ show, setShowNested }) => {
   );
 };
 const Comment = observer(({ comment }) => {
-  const { by, text, id: commentID, kids, deleted } = comment;
+  const { by, text, deleted, nestedComments } = comment;
   const [showNested, setShowNested] = useState(false);
-  const AppContext = useAppContext();
-  const { load, commentsLoaded, nestedCommentsLoaded } = AppContext;
-  const nestedComments = nestedCommentsStore.getNestedComments(commentID);
-  useEffect(() => {
-    const saveNestedComments = async () => {
-      if (kids && !nestedComments) {
-        kids.forEach((nestedComment, nestedIndex) => {
-          const data = getComment(nestedComment);
-          data.then((commentData) => {
-            nestedCommentsStore.addNestedComment(commentID, commentData);
-            if (nestedIndex === kids.length - 1) {
-              load("nested", commentID);
-            }
-          });
-        });
-      }
-    };
-    saveNestedComments();
-  }, []);
 
+  const nestedList =
+    nestedComments &&
+    nestedComments.map((nested, index) => (
+      <div className="ps-4 d-flex " key={(index === 0 ? 1 : index) + nested.id}>
+        <Comment comment={nested} />
+      </div>
+    ));
   return (
     <Card className="border-0 border-bottom d-flex align-items-start">
       {deleted ? (
@@ -61,16 +43,10 @@ const Comment = observer(({ comment }) => {
               dangerouslySetInnerHTML={{ __html: text }}
             />
           </Card.Body>
-          {kids && (
+          {nestedComments && (
             <ShowNestedButton show={showNested} setShowNested={setShowNested} />
           )}
-          {showNested &&
-            nestedComments &&
-            nestedComments.map((nested, index) => (
-              <div className="ps-3 d-flex " key={index + nested.id}>
-                <Comment comment={nested} />
-              </div>
-            ))}
+          {showNested && nestedList}
         </>
       )}
     </Card>

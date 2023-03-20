@@ -6,16 +6,26 @@ class NestedComments {
     makeAutoObservable(this);
   }
 
-  addNestedComments(nestedComment) {
-    this.nestedComments = nestedComment;
+  addNestedComment(newsID, nestedComment) {
+    const commentExists = this.nestedComments[newsID]?.find(
+      (elem) => elem.id === nestedComment.id
+    );
+    if (commentExists) {
+      const commentIndex = this.nestedComments[newsID].indexOf(commentExists);
+      this.nestedComments[newsID][commentIndex] = nestedComment;
+    } else {
+      newsID in this.nestedComments
+        ? this.nestedComments[newsID].push(nestedComment)
+        : (this.nestedComments[newsID] = [nestedComment]);
+    }
   }
-  addNestedComment(rootCommentID, nestedComment) {
-    rootCommentID in this.nestedComments
-      ? this.nestedComments[rootCommentID].push(nestedComment)
-      : (this.nestedComments[rootCommentID] = [nestedComment]);
+  getNestedComments(newsID, rootCommentID) {
+    const newsComments = this.nestedComments[newsID];
+    return newsComments?.filter((elem) => elem.parent === rootCommentID);
   }
-  getNestedComments(rootID) {
-    return this.nestedComments[rootID];
+  getNestedCommentsCount(newsID) {
+    const nestedComments = this.getNestedComments(newsID);
+    return nestedComments ? nestedComments.length : 0;
   }
 }
 const nestedCommentsStore = new NestedComments();

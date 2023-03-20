@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 
 import Card from "react-bootstrap/Card";
 
@@ -6,7 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import TimeDiff from "js-time-diff";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+
 const getDifferenceString = (elemTime) => {
   const elemDate = new Date(elemTime * 1000);
   const currentDate = new Date();
@@ -25,7 +25,7 @@ const getTitleElem = (target) => {
 };
 
 const NewsElem = ({ elem }) => {
-  const { by, id, kids, time, title, type, url, descendants, score } = elem;
+  const { by, id, time, title, score } = elem;
 
   const navigate = useNavigate();
 
