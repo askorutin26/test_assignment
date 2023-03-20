@@ -26,11 +26,6 @@ class News {
   getAllNews() {
     return this.state;
   }
-  getAllNewsIds() {
-    return this.state.map((news) => news.id);
-  }
 }
 const newsStore = new News();
 export default newsStore;
-//1 The quantum state of a TCP port
-//100 Ask HN: What has your personal website/blog done for you?

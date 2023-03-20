@@ -6,9 +6,6 @@ class Comments {
     makeAutoObservable(this);
   }
 
-  addComments(comment) {
-    this.state = comment;
-  }
   addComment(newsID, comment) {
     const commentExists = this.state[newsID]?.find(
       (elem) => elem.id === comment.id
@@ -39,16 +36,6 @@ class Comments {
 
     return count;
   }
-  getAllCommentsLength() {
-    let length = 0;
-    const keys = Object.keys(this.state);
-    keys.forEach((key) => (length += this.state[key].length));
-    return length;
-  }
-  getAllComments() {
-    return this.state;
-  }
 }
 const commentsStore = new Comments();
 export default commentsStore;
-//nested comment

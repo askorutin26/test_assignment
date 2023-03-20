@@ -19,6 +19,7 @@ const ShowNestedButton = ({ show, setShowNested }) => {
     </Button>
   );
 };
+
 const Comment = observer(({ comment }) => {
   const { by, text, deleted, nestedComments } = comment;
   const [showNested, setShowNested] = useState(false);
@@ -54,4 +55,3 @@ const Comment = observer(({ comment }) => {
 });
 
 export default Comment;
-//nestedCommentsStore.addNestedComment(id, commentData);

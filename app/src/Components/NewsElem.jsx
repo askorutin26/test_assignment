@@ -1,11 +1,11 @@
 import React from "react";
 
-import Card from "react-bootstrap/Card";
+import { useNavigate } from "react-router-dom";
 
+import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import TimeDiff from "js-time-diff";
-import { useNavigate } from "react-router-dom";
 
 const getDifferenceString = (elemTime) => {
   const elemDate = new Date(elemTime * 1000);

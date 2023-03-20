@@ -1,11 +1,10 @@
 import React from "react";
 
 import ListGroup from "react-bootstrap/ListGroup";
-
+import Container from "react-bootstrap/Container";
 import NewsElem from "./NewsElem.jsx";
 
 import newsStore from "../store/newsStore";
-import Container from "react-bootstrap/Container";
 
 import { observer } from "mobx-react-lite";
 

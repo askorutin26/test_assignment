@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import newsStore from "../store/newsStore";
+import { Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
+
 import CommentsList from "./CommentsList";
 import NotFound from "./NotFound";
 
-import { observer } from "mobx-react-lite";
 import { useAppContext } from "../Context/App";
 import commentsStore from "../store/commentsStore.js";
+import newsStore from "../store/newsStore";
 
 const NewsPage = observer(() => {
   const AppContext = useAppContext();
@@ -32,8 +34,6 @@ const NewsPage = observer(() => {
     }
     useEffect(() => {
       saveComments(newsID);
-
-      //let timerId = setInterval(saveComments, 1000 * 60);
     }, [kids, newsID, saveComments]);
 
     return (

@@ -1,9 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { Link } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
+
 import { useAppContext } from "../Context/App";
+
 const Nav = () => {
   const AppContext = useAppContext();
   const { saveNews } = AppContext;
