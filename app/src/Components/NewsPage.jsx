@@ -11,12 +11,13 @@ import CommentsList from "./CommentsList";
 import NotFound from "./NotFound";
 
 import { useAppContext } from "../Context/App";
-import commentsStore from "../store/commentsStore.js";
+
 import newsStore from "../store/newsStore";
 
 const NewsPage = observer(() => {
   const AppContext = useAppContext();
-  const { saveComments, commentsLoaded } = AppContext;
+  const { saveComments, updateComments } = AppContext;
+
   const params = useParams();
   const newsID = Number(params.id);
 
@@ -24,16 +25,14 @@ const NewsPage = observer(() => {
   if (!news) {
     return <NotFound />;
   } else {
-    const { by, kids, time, title, url } = news;
+    const { by, kids, time, title, url, descendants } = news;
 
     const date = new Date(time * 1000).toLocaleString();
 
-    let commentsCount = commentsStore.getCommentsCount(newsID);
-    if (commentsLoaded) {
-      commentsCount = commentsStore.getCommentsCount(newsID);
-    }
     useEffect(() => {
-      saveComments(newsID);
+      if (kids) {
+        saveComments(kids);
+      }
     }, [kids, newsID, saveComments]);
 
     return (
@@ -47,7 +46,6 @@ const NewsPage = observer(() => {
             >
               {title}
             </Card.Link>
-
             <Container className="d-flex flex-row align-items-center">
               <Link to="/" className="text-decoration-none link-secondary">
                 <Button variant="light">
@@ -57,7 +55,7 @@ const NewsPage = observer(() => {
               <Button
                 variant="light ms-2"
                 className=""
-                onClick={() => saveComments(newsID)}
+                onClick={() => updateComments(newsID)}
               >
                 <i className="bi bi-arrow-clockwise" />
               </Button>
@@ -69,12 +67,11 @@ const NewsPage = observer(() => {
                   {date}
                 </Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted text-center">
-                  {`${commentsCount} comments`}
+                  {`${descendants} comments`}
                 </Card.Subtitle>
               </Container>
             </Container>
-
-            {commentsLoaded && <CommentsList newsID={newsID} />}
+            {<CommentsList newsID={newsID} />}
           </Card.Body>
         </Card>
       </Container>

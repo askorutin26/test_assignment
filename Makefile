@@ -1,4 +1,4 @@
 start:
 	cd ./app && npm start
 install:
-	npm ci
+	cd ./app && npm ci

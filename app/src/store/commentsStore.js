@@ -1,40 +1,26 @@
 import { makeAutoObservable } from "mobx";
 
 class Comments {
-  state = {};
+  state = [];
   constructor() {
     makeAutoObservable(this);
   }
 
-  addComment(newsID, comment) {
-    const commentExists = this.state[newsID]?.find(
-      (elem) => elem.id === comment.id
-    );
+  addComment(comment) {
+    const { id: commentID } = comment;
+    const commentExists = this.getComment(commentID);
     if (commentExists) {
-      const commentIndex = this.state[newsID].indexOf(commentExists);
-      this.state[newsID][commentIndex] = comment;
+      const commentIndex = this.state.indexOf(commentExists);
+      this.state[commentIndex] = comment;
     } else {
-      newsID in this.state
-        ? this.state[newsID].push(comment)
-        : (this.state[newsID] = [comment]);
+      this.state.push(comment);
     }
   }
-  getComments(newsID) {
-    return this.state[newsID];
+  getComments(ID) {
+    return this.state.filter((comment) => comment.parent === ID);
   }
-  getCommentsCount(newsID) {
-    const comments = this.getComments(newsID);
-    let count = 0;
-    comments &&
-      comments.forEach((comment) => {
-        count += 1;
-        if ("nestedComments" in comment) {
-          const nestedCount = comment.nestedComments.length;
-          count += nestedCount;
-        }
-      });
-
-    return count;
+  getComment(ID) {
+    return this.state.find((comment) => comment.id === ID);
   }
 }
 const commentsStore = new Comments();

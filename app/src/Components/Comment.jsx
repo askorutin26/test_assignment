@@ -4,6 +4,9 @@ import Button from "react-bootstrap/Button";
 
 import { observer } from "mobx-react-lite";
 
+import commentsStore from "../store/commentsStore";
+import { useAppContext } from "../Context/App";
+
 const ShowNestedButton = ({ show, setShowNested }) => {
   const caretClass = show ? "bi-caret-up" : "bi-caret-down";
   const colorClass = show ? "text-info" : "text-dark";
@@ -21,12 +24,16 @@ const ShowNestedButton = ({ show, setShowNested }) => {
 };
 
 const Comment = observer(({ comment }) => {
-  const { by, text, deleted, nestedComments } = comment;
-  const [showNested, setShowNested] = useState(false);
+  const AppContext = useAppContext();
+  const { getDifferenceString } = AppContext;
 
+  const { by, text, deleted, time, kids, id } = comment;
+
+  const [showNested, setShowNested] = useState(false);
+  const nested = kids && commentsStore.getComments(id);
   const nestedList =
-    nestedComments &&
-    nestedComments.map((nested, index) => (
+    nested &&
+    nested.map((nested, index) => (
       <div className="ps-4 d-flex " key={(index === 0 ? 1 : index) + nested.id}>
         <Comment comment={nested} />
       </div>
@@ -38,13 +45,17 @@ const Comment = observer(({ comment }) => {
       ) : (
         <>
           <Card.Subtitle className="ms-3 mt-3">{by}:</Card.Subtitle>
+          <div className="ms-3 fs-6 text-muted">
+            {getDifferenceString(time)}
+          </div>
+
           <Card.Body className="d-flex pb-0">
             <Card.Text
               className=" m-0 p-1 text-wrap"
               dangerouslySetInnerHTML={{ __html: text }}
             />
           </Card.Body>
-          {nestedComments && (
+          {nested && (
             <ShowNestedButton show={showNested} setShowNested={setShowNested} />
           )}
           {showNested && nestedList}

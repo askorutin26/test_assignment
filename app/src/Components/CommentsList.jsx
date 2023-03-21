@@ -12,10 +12,12 @@ const CommentsList = observer(({ newsID }) => {
   const commentsToShow = commentsStore.getComments(newsID);
 
   const list = [];
-  commentsToShow?.forEach((comment) => {
-    const { id } = comment;
-    list.push(<Comment comment={comment} key={id} />);
-  });
+  commentsToShow
+    ?.sort((a, b) => b.time - a.time)
+    .forEach((comment) => {
+      const { id } = comment;
+      list.push(<Comment comment={comment} key={id} />);
+    });
 
   return (
     <Card className="border-0 rounded-top d-flex">

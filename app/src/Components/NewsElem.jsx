@@ -5,13 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import TimeDiff from "js-time-diff";
 
-const getDifferenceString = (elemTime) => {
-  const elemDate = new Date(elemTime * 1000);
-  const currentDate = new Date();
-  return TimeDiff(elemDate, currentDate);
-};
+import { useAppContext } from "../Context/App";
 
 const getTitleElem = (target) => {
   if (target.classList.contains("card")) {
@@ -25,6 +20,9 @@ const getTitleElem = (target) => {
 };
 
 const NewsElem = ({ elem }) => {
+  const AppContext = useAppContext();
+  const { getDifferenceString } = AppContext;
+
   const { by, id, time, title, score } = elem;
 
   const navigate = useNavigate();
