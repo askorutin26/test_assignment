@@ -1,1 +1,4 @@
-# test_assignment
+### Start locally:
+`$make install`
+
+`$make start`
